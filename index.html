@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaysia EPF Retirement Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .creator-info {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .input-group {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .input-group label {
+            flex: 1;
+            margin-right: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+        .input-group input {
+            flex: 1.6;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: white;
+        }
+        .input-group input.empty-field {
+            background-color: #ffe6e6; /* Light red for empty fields */
+            border-color: red;
+        }
+        /* Styles for two-column layout */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 0; 
+        }
+        .form-row .input-group {
+            flex: 0 0 calc(50% - 10px); /* 50% width minus some margin */
+            margin-bottom: 15px; /* Add margin back for vertical spacing */
+        }
+        @media (max-width: 768px) {
+            .form-row .input-group {
+                flex: 0 0 100%; /* On smaller screens, stack them */
+            }
+        }
+        .remark-text {
+            font-size: 0.85em;
+            color: #777;
+            margin-top: -10px;
+            margin-left: 0;
+            padding-left: 0;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        /* Specific style for the Calculate button */
+        #calculateButton { 
+            background-color: #28a745; /* Green */
+            width: 30%; /* Set width to 30% */
+            margin: 20px auto 0 auto; /* Center align by setting left/right margin to auto */
+        }
+        #calculateButton:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
+
+        #results {
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        #results h2 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        table thead tr {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+        }
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        table tbody tr:hover {
+            background-color: #e2e2e2;
+        }
+        .currency {
+            text-align: center;
+        }
+        .positive-saving {
+            color: green;
+            font-weight: bold;
+        }
+        .negative-saving {
+            color: red;
+            font-weight: bold;
+        }
+        .zero-saving {
+            color: red;
+            font-weight: bold;
+        }
+        .withdrawal-zero {
+            color: green;
+            font-weight: bold;
+        }
+        .withdrawal-positive {
+            color: red;
+            font-weight: bold;
+        }
+
+        #chart-section {
+            margin-top: 40px;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+            text-align: center;
+        }
+        #chart-section h2 {
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+        #epfChartContainer {
+            position: relative;
+            width: 80%;
+            margin: auto;
+            max-width: 700px;
+            height: 400px;
+            display: block;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        #toggleChartButton {
+            animation: blink 1.5s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Malaysia EPF Retirement Calculator</h1>
+        <p class="creator-info">* Created by WH Lai, 22-11-2025 ** Use at your own risk *</p>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label for="currentSaving">Current EPF Saving (RM):</label>
+                <input type="number" id="currentSaving" value="50000" min="0" placeholder="Please enter a value">
+            </div>
+            <div class="input-group">
+                <label for="age">Current Age:</label>
+                <input type="number" id="age" value="30" min="18" max="99" placeholder="Please enter a value">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label for="annualSaving">Projected Annual EPF Contribution (RM):</label>
+                <input type="number" id="annualSaving" value="10000" min="0" placeholder="Please enter a value">
+            </div>
+            <div class="input-group">
+                <label for="projectedContributionIncrement">Projected Annual EPF Contribution Increment (%):</label>
+                <input type="number" id="projectedContributionIncrement" value="3" min="0" step="0.1" placeholder="Please enter a value">
+            </div>
+        </div>
+        
+        <div class="form-row">
+            <div class="input-group">
+                <label for="contributionAgeLimit">Projected EPF Contribution Age Limit:</label>
+                <input type="number" id="contributionAgeLimit" value="55" min="18" max="99" placeholder="Please enter a value">
+            </div>
+            <div class="input-group">
+                <label for="interestRate">Projected EPF Interest (%):</label>
+                <input type="number" id="interestRate" value="5" min="0" step="0.1" placeholder="Please enter a value">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label for="annualWithdrawal">Initial Annual EPF Withdrawal (RM):</label>
+                <input type="number" id="annualWithdrawal" value="5000" min="0" placeholder="Please enter a value">
+            </div>
+            <div class="input-group">
+                <label for="initialWithdrawalAge">Initial EPF Withdrawal Age (≥55):</label>
+                <input type="number" id="initialWithdrawalAge" value="55" min="55" max="99" placeholder="Please enter a value">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="input-group">
+                <label for="inflationRate">Projected Inflation Rate (%):</label>
+                <input type="number" id="inflationRate" value="2" min="0" step="0.1" placeholder="Please enter a value">
+            </div>
+        </div>
+
+
+        <div class="remark-text">The amount of EPF withdrawal will increase with inflation each year.</div>
+
+        <button id="calculateButton" onclick="calculateEPF()">Calculate</button>
+
+        <div id="chart-section">
+            <button id="toggleChartButton" onclick="toggleChart()">Click To Hide The Chart</button>
+            <h2>Retirement Projection Chart</h2>
+            <div id="epfChartContainer">
+                <canvas id="epfChart"></canvas>
+            </div>
+        </div>
+
+        <div id="results">
+            <h2>Retirement Projection Summary</h2>
+            <div class="table-container">
+                <table id="epfTable">
+                    <thead>
+                        <tr>
+                            <th>Current Age</th>
+                            <th>Current EPF Saving (RM)</th>
+                            <th>Projected Annual EPF Contribution (RM)</th>
+                            <th>Projected EPF Interest (%)</th>
+                            <th>Projected Yearly EPF Interest Earning (RM)</th>
+                            <th>Inflation Adjusted Annual EPF Withdrawal (RM)</th>
+                            <th>Projected Year End EPF Saving (RM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Results will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Removed WITHDRAWAL_AGE constant as it's now dynamic
+        let epfChart;
+
+        function validateInput(inputElement) {
+            // Check for both empty string and NaN (from parseFloat/parseInt on non-numeric input)
+            if (inputElement.value === '' || isNaN(parseFloat(inputElement.value))) {
+                inputElement.classList.add('empty-field');
+                inputElement.placeholder = "Please enter a value";
+                return false;
+            } else {
+                inputElement.classList.remove('empty-field');
+                inputElement.placeholder = "";
+                return true;
+            }
+        }
+
+        function calculateEPF() {
+            const inputIds = [
+                'currentSaving', 'age', 'annualSaving', 'projectedContributionIncrement',
+                'contributionAgeLimit', 'interestRate', 'inflationRate', 'annualWithdrawal',
+                'initialWithdrawalAge' // Added new input ID
+            ];
+            let allInputsValid = true;
+            let emptyFields = [];
+
+            inputIds.forEach(id => {
+                const inputElement = document.getElementById(id);
+                if (!validateInput(inputElement)) {
+                    allInputsValid = false;
+                    let labelText = document.querySelector(`label[for="${id}"]`).textContent;
+                    emptyFields.push(labelText.replace(':', ''));
+                }
+            });
+
+            if (!allInputsValid) {
+                alert('Please fill in the following fields:\n' + emptyFields.join('\n'));
+                return;
+            }
+
+            // Specific validation for Contribution Age Limit vs Current Age
+            let currentAge = parseInt(document.getElementById('age').value);
+            let contributionAgeLimit = parseInt(document.getElementById('contributionAgeLimit').value);
+            let initialWithdrawalAge = parseInt(document.getElementById('initialWithdrawalAge').value); // Get new field value
+            
+            if (contributionAgeLimit < currentAge) {
+                alert('Projected EPF Contribution Age Limit must be greater than or equal to Current Age.');
+                document.getElementById('contributionAgeLimit').classList.add('empty-field'); // Highlight the field
+                document.getElementById('contributionAgeLimit').focus(); // Bring focus to it
+                return;
+            } else {
+                document.getElementById('contributionAgeLimit').classList.remove('empty-field');
+            }
+
+            // New validation for Initial EPF Withdrawal Age
+            if (initialWithdrawalAge < 55) {
+                alert('Initial EPF Withdrawal Age must be 55 or greater.');
+                document.getElementById('initialWithdrawalAge').classList.add('empty-field');
+                document.getElementById('initialWithdrawalAge').focus();
+                return;
+            } else if (initialWithdrawalAge < currentAge) {
+                 alert('Initial EPF Withdrawal Age cannot be less than your Current Age.');
+                document.getElementById('initialWithdrawalAge').classList.add('empty-field');
+                document.getElementById('initialWithdrawalAge').focus();
+                return;
+            }
+             else {
+                document.getElementById('initialWithdrawalAge').classList.remove('empty-field');
+            }
+
+
+            let initialAge = currentAge; 
+            let currentAnnualSaving = parseFloat(document.getElementById('annualSaving').value); // Will be updated annually
+            let projectedContributionIncrementRate = parseFloat(document.getElementById('projectedContributionIncrement').value) / 100;
+            // contributionAgeLimit already parsed
+            let interestRate = parseFloat(document.getElementById('interestRate').value) / 100;
+            let inflationRate = parseFloat(document.getElementById('inflationRate').value) / 100;
+            let initialAnnualWithdrawal = parseFloat(document.getElementById('annualWithdrawal').value);
+
+            const tableBody = document.querySelector('#epfTable tbody');
+            tableBody.innerHTML = '';
+
+            let projectedSaving = parseFloat(document.getElementById('currentSaving').value);
+
+            const ages = [];
+            const savings = []; 
+            const colors = []; 
+
+            let annualWithdrawalAdjustedForInflation = initialAnnualWithdrawal; 
+            let withdrawalStarted = false;
+
+            let previousYearEndSaving = projectedSaving; 
+
+            for (let i = initialAge; i <= 100; i++) {
+                let yearStartSaving = projectedSaving;
+                let annualContributionForThisYear = 0;
+
+                // Apply contribution logic
+                if (i < contributionAgeLimit) {
+                    annualContributionForThisYear = currentAnnualSaving;
+                    // Increment for the *next* year's calculation, but use current for this year's table row
+                    currentAnnualSaving *= (1 + projectedContributionIncrementRate); 
+                } else if (i === contributionAgeLimit) {
+                    annualContributionForThisYear = currentAnnualSaving; // Last year of contribution
+                    currentAnnualSaving = 0; // Set to 0 for subsequent years
+                } else {
+                    annualContributionForThisYear = 0; // After age limit, no more contributions
+                }
+
+
+                let savingBeforeInterest = yearStartSaving + annualContributionForThisYear;
+                let interestEarned = savingBeforeInterest * interestRate;
+                let savingAfterInterest = savingBeforeInterest + interestEarned;
+
+                let actualWithdrawalThisYear = 0;
+
+                // Use initialWithdrawalAge instead of fixed WITHDRAWAL_AGE
+                if (i >= initialWithdrawalAge) {
+                    if (!withdrawalStarted) {
+                        actualWithdrawalThisYear = initialAnnualWithdrawal;
+                        annualWithdrawalAdjustedForInflation = initialAnnualWithdrawal; 
+                        withdrawalStarted = true;
+                    } else {
+                        annualWithdrawalAdjustedForInflation = annualWithdrawalAdjustedForInflation * (1 + inflationRate);
+                        actualWithdrawalThisYear = annualWithdrawalAdjustedForInflation;
+                    }
+
+                    if (savingAfterInterest < actualWithdrawalThisYear) {
+                        actualWithdrawalThisYear = savingAfterInterest;
+                    }
+                }
+                
+                let yearEndEPFSaving = savingAfterInterest - actualWithdrawalThisYear;
+
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = i;
+                row.insertCell().textContent = yearStartSaving.toFixed(2);
+                row.insertCell().textContent = annualContributionForThisYear.toFixed(2); // Display this year's contribution
+                row.insertCell().textContent = (interestRate * 100).toFixed(2);
+                row.insertCell().textContent = interestEarned.toFixed(2);
+                
+                const withdrawalCell = row.insertCell();
+                withdrawalCell.textContent = actualWithdrawalThisYear.toFixed(2); 
+                if (actualWithdrawalThisYear > 0) {
+                    withdrawalCell.classList.add('withdrawal-positive');
+                } else {
+                    withdrawalCell.classList.add('withdrawal-zero');
+                }
+
+                const projectedSavingCell = row.insertCell();
+                projectedSavingCell.textContent = yearEndEPFSaving.toFixed(2);
+
+                if (yearEndEPFSaving === 0) {
+                    projectedSavingCell.classList.add('zero-saving');
+                } else if (yearEndEPFSaving >= yearStartSaving) {
+                    projectedSavingCell.classList.add('positive-saving');
+                } else {
+                    projectedSavingCell.classList.add('negative-saving');
+                }
+
+                ages.push(i);
+                savings.push(yearEndEPFSaving); 
+
+                if (yearEndEPFSaving < previousYearEndSaving) {
+                    colors.push('red');
+                } else {
+                    colors.push('green');
+                }
+                previousYearEndSaving = yearEndEPFSaving; 
+
+                projectedSaving = yearEndEPFSaving;
+            }
+            updateChart(ages, savings, colors);
+
+            // Removed the dynamic update for the remark text as it's now static
+            // document.getElementById('displayWithdrawalAge').textContent = initialWithdrawalAge;
+        }
+
+        function updateChart(ages, savings, colors) {
+            const ctx = document.getElementById('epfChart').getContext('2d');
+
+            if (epfChart) {
+                epfChart.destroy();
+            }
+
+            const overallLineColor = colors.some(color => color === 'red') ? 'red' : 'green';
+            const overallFillColor = colors.some(color => color === 'red') ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 255, 0, 0.1)';
+
+
+            epfChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ages,
+                    datasets: [{
+                        label: 'Projected Year End EPF Saving (RM)',
+                        data: savings, 
+                        borderColor: overallLineColor, 
+                        backgroundColor: overallFillColor, 
+                        fill: 'origin', 
+                        tension: 0.1,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Current Age'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: ['Projected Year End', 'EPF Saving (RM)']
+                            },
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    label += new Intl.NumberFormat('en-MY', { style: 'currency', currency: 'MYR' }).format(context.raw);
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function toggleChart() {
+            const epfChartContainer = document.getElementById('epfChartContainer');
+            const chartTitle = document.querySelector('#chart-section h2');
+            const toggleButton = document.getElementById('toggleChartButton');
+
+            if (epfChartContainer.style.display === 'none' || epfChartContainer.style.display === '') {
+                epfChartContainer.style.display = 'block';
+                chartTitle.style.display = 'block';
+                toggleButton.textContent = 'Click To Hide The Chart';
+            } else {
+                epfChartContainer.style.display = 'none';
+                chartTitle.style.display = 'none';
+                toggleButton.textContent = 'Click To Show The Chart';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const inputElements = document.querySelectorAll('.input-group input[type="number"]');
+            inputElements.forEach(input => {
+                input.addEventListener('input', () => {
+                    validateInput(input);
+                });
+                validateInput(input); // Initial validation and styling
+            });
+
+            // Removed the event listener for initialWithdrawalAge as the text is now static
+            // document.getElementById('initialWithdrawalAge').addEventListener('input', () => {
+            //     const initialWithdrawalAge = parseInt(document.getElementById('initialWithdrawalAge').value);
+            //     if (!isNaN(initialWithdrawalAge) && initialWithdrawalAge >= 55) {
+            //         document.getElementById('displayWithdrawalAge').textContent = initialWithdrawalAge;
+            //     } else if (!isNaN(initialWithdrawalAge) && initialWithdrawalAge < 55) {
+            //          document.getElementById('displayWithdrawalAge').textContent = 55; // Revert to default or indicate error visually
+            //     }
+            // });
+
+
+            calculateEPF(); // Calculate and display chart on page load
+
+            document.getElementById('epfChartContainer').style.display = 'block';
+            document.querySelector('#chart-section h2').style.display = 'block';
+            document.getElementById('toggleChartButton').textContent = 'Click To Hide The Chart';
+        });
+    </script>
+</body>
+</html>
