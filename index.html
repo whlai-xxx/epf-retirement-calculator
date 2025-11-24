@@ -30,6 +30,7 @@
             margin-bottom: 25px;
             color: #666;
             font-size: 0.9em;
+            line-height: 1.4; /* Added for line spacing */
         }
         .input-group {
             margin-bottom: 15px;
@@ -49,7 +50,7 @@
             max-width: 180px;
             padding: 10px;
             border: 1px solid #ddd;
-            border-radius: 44px; /* Corrected typo: Changed from 4 to 4px */
+            border-radius: 4px; /* Corrected typo: Changed from 4 to 4px */
             box-sizing: border-box;
             background-color: white;
             text-align: center; /* Added for center alignment */
@@ -162,9 +163,9 @@
         }
 
         #chart-section {
-            margin-top: 40px;
             padding-top: 20px;
             text-align: center;
+            flex-grow: 1; /* Allow chart section to take available space */
         }
         #chart-section h2 {
             color: #0056b3;
@@ -172,9 +173,7 @@
         }
         .chart-container-wrapper { /* New wrapper for individual chart containers */
             position: relative;
-            width: 80%;
-            margin: auto;
-            max-width: 700px;
+            width: 100%; /* Take full width of its flex parent */
             height: 400px;
             margin-bottom: 40px; /* Increased space below each chart wrapper */
         }
@@ -279,12 +278,81 @@
             line-height: 1;
             display: block;
         }
+
+        /* Styles for the new summary box */
+        #summaryBox {
+            flex: 0 0 250px; /* Narrower box for summary */
+            margin-right: 30px;
+            padding: 20px;
+            background-color: white; /* Changed to white */
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid white; /* Changed to white */
+            text-align: center; /* Center align text */
+            display: flex; /* Use flexbox for vertical alignment */
+            flex-direction: column;
+            justify-content: space-around; /* Distribute space evenly */
+        }
+        #summaryBox h3 {
+            color: #0056b3; /* Changed to match main title */
+            margin-top: 0;
+            font-size: 2.2em; /* Bigger font for "Quick Insights" */
+            font-weight: bold; /* Make bold */
+            margin-bottom: 15px; /* Added some margin for spacing */
+        }
+        #summaryBox p {
+            font-size: 1.4em; /* Slightly bigger font for depletion messages */
+            margin-bottom: 10px;
+            line-height: 1.4;
+            color: black; /* Changed to black */
+        }
+        #summaryBox #depletionMessage span {
+            font-size: 4.4em; /* Double the current setting for age number */
+            color: red;
+            font-weight: bold;
+            display: block; /* Ensure it's on its own line */
+            margin-top: 5px;
+        }
+        #summaryBox .life-expectancy-group {
+            margin-top: 15px; /* Adjusted margin to prevent crowding */
+            display: flex;
+            justify-content: center; /* Center male/female text */
+            align-items: center;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            margin-bottom: 0; /* Remove bottom margin */
+            flex-direction: column; /* Stack male/female vertically */
+        }
+        #summaryBox .life-expectancy-group p {
+            font-size: 1.0em; /* Adjust font size */
+            font-weight: bold;
+            margin: 0 10px; /* Spacing between male/female */
+        }
+        #summaryBox .life-expectancy-group span {
+            font-size: 1.8em; /* Bigger font for life expectancy numbers */
+        }
+        #summaryBox #maleLifeExpectancyValue {
+            color: #007bff;
+        }
+        #summaryBox #femaleLifeExpectancyValue {
+            color: #d63384;
+        }
+
+        /* Flex container for summary box and chart section */
+        .summary-chart-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch; /* Stretch children to match height */
+            margin-top: 40px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Malaysia EPF Retirement Calculator</h1>
-        <p class="creator-info">* Created by WH Lai, 22-11-2025 ** Use at your own risk *</p>
+        <p class="creator-info">
+            Created by WH Lai, 22-11-2025<br>
+            The developer assumes no responsibility for any consequences of its use.
+        </p>
 
         <div class="form-row">
             <div class="input-group">
@@ -393,20 +461,35 @@
 
         <button id="calculateButton" onclick="calculateEPF()">Calculate</button>
 
-        <div id="chart-section">
-            <div class="chart-toggle-group">
-                <button id="showBalanceChart" class="active" onclick="switchChart('balance')">Year-End EPF Balance</button>
-                <button id="showDividendChart" onclick="switchChart('dividend')">Yearly EPF Dividend Earning</button>
-            </div>
-            
-            <div id="epfBalanceChartWrapper" class="chart-container-wrapper">
-                <h2>Year-End EPF Balance Projection</h2>
-                <canvas id="epfBalanceChart"></canvas>
+        <div class="summary-chart-container">
+            <!-- New Summary Box -->
+            <div id="summaryBox">
+                <h3>Quick Insights</h3>
+                <p id="depletionMessage">
+                    <!-- Message will be inserted here -->
+                </p>
+                <div class="life-expectancy-group">
+                    <p style="margin-bottom: 5px;">Average Malaysian Life Expectancy:</p>
+                    <p>Male: <span id="maleLifeExpectancyValue">72.9</span> yrs</p>
+                    <p>Female: <span id="femaleLifeExpectancyValue">77.6</span> yrs</p>
+                </div>
             </div>
 
-            <div id="epfDividendChartWrapper" class="chart-container-wrapper" style="display:none;">
-                <h2>Yearly EPF Dividend Earning Projection</h2>
-                <canvas id="epfDividendChart"></canvas>
+            <div id="chart-section">
+                <div class="chart-toggle-group">
+                    <button id="showBalanceChart" class="active" onclick="switchChart('balance')">Year-End EPF Balance</button>
+                    <button id="showDividendChart" onclick="switchChart('dividend')">Yearly EPF Dividend Earning</button>
+                </div>
+                
+                <div id="epfBalanceChartWrapper" class="chart-container-wrapper">
+                    <h2>Year-End EPF Balance Projection</h2>
+                    <canvas id="epfBalanceChart"></canvas>
+                </div>
+
+                <div id="epfDividendChartWrapper" class="chart-container-wrapper" style="display:none;">
+                    <h2>Yearly EPF Dividend Earning Projection</h2>
+                    <canvas id="epfDividendChart"></canvas>
+                </div>
             </div>
         </div>
 
@@ -545,6 +628,8 @@
 
             let previousYearEndSaving = projectedSaving; 
 
+            let depletionAge = -1; // -1 indicates no depletion
+
             for (let i = initialAge; i <= 100; i++) {
                 let yearStartSaving = projectedSaving;
                 let annualContributionForThisYear = 0;
@@ -598,13 +683,15 @@
                 const projectedSavingCell = row.insertCell();
                 projectedSavingCell.textContent = yearEndEPFSaving.toFixed(2);
 
-                if (yearEndEPFSaving === 0) {
+                if (yearEndEPFSaving <= 0 && depletionAge === -1) { // Set depletion age at first instance of <= 0
+                    depletionAge = i;
                     projectedSavingCell.classList.add('zero-saving');
-                } else if (yearEndEPFSaving >= yearStartSaving) {
+                } else if (yearEndEPFSaving >= previousYearEndSaving) {
                     projectedSavingCell.classList.add('positive-saving');
                 } else {
                     projectedSavingCell.classList.add('negative-saving');
                 }
+
 
                 ages.push(i);
                 savings.push(yearEndEPFSaving); 
@@ -623,6 +710,20 @@
             createEPFBalanceChart(ages, savings, yearColors); // Pass yearColors
             createEPFDividendChart(ages, dividendEarnings, yearColors); // Pass yearColors
             
+            // Update Summary Box
+            const maleLifeExpectancy = 72.9;
+            const femaleLifeExpectancy = 77.6;
+            
+            const depletionMessageElement = document.getElementById('depletionMessage');
+            if (depletionAge !== -1) {
+                depletionMessageElement.innerHTML = `Your EPF savings will be fully withdrawn at the age of <span id="depletionAgeValue">${depletionAge}</span>`;
+            } else {
+                depletionMessageElement.innerHTML = `Your EPF savings are projected to last beyond typical life expectancy.`;
+                depletionMessageElement.style.color = 'black'; // Set color to black
+            }
+            document.getElementById('maleLifeExpectancyValue').textContent = maleLifeExpectancy;
+            document.getElementById('femaleLifeExpectancyValue').textContent = femaleLifeExpectancy;
+
             // Ensure the correct chart is displayed and buttons are active after recalculation
             if (currentChart === 'balance') {
                 switchChart('balance');
