@@ -1,230 +1,138 @@
+<!-- START OF FILE ai_studio_code (19).html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Malaysia EPF Retirement Calculator</title>
+    <title>Malaysia EPF Retirement Calculator - Montserrat Design</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font: Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background-color: #F3F4F6; /* Cool light grey */
+            color: #1F2937;
+            line-height: 1.5;
         }
         .container {
             max-width: 900px;
             margin: auto;
-            background: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: relative;
         }
-        h1 {
-            color: #0056b3;
+
+        /* --- HEADER SECTION --- */
+        .header-background-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 160px; /* Fixed height */
+            /* UPDATED IMAGE: Plant/Seedling */
+            background-image: url('https://images.unsplash.com/photo-1546768292-fb12f6c92568?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            z-index: 0;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+            /* Flexbox for centering */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 160px; 
+            
+            /* Negative margins pull the text box up to ignore container padding */
+            margin-top: -40px;
+            margin-left: -40px;
+            margin-right: -40px;
+            margin-bottom: 30px; 
+            padding-bottom: 0; 
+
+            border-bottom: 1px solid #E5E7EB;
             text-align: center;
-            margin-bottom: 5px;
+            box-sizing: border-box; 
+            gap: 4px; 
+        }
+
+        h1 {
+            color: #111827;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            margin: 0; 
+            font-size: 28px;
+            text-transform: uppercase;
+            line-height: 1.2;
         }
         .creator-info {
-            text-align: center;
-            margin-bottom: 25px;
-            color: #666;
-            font-size: 0.9em;
-            line-height: 1.4; /* Added for line spacing */
+            color: #6B7280;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin: 0; 
+            line-height: 1.4;
         }
-        .input-group {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        .input-group label {
-            flex: 1;
-            margin-right: 10px;
-            font-weight: bold;
-            text-align: left;
-            display: flex; /* For inline icon and text */
-            align-items: center; /* For inline icon and text */
-        }
-        .input-group input {
-            flex: 0.8;
-            max-width: 180px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px; /* Corrected typo: Changed from 4 to 4px */
-            box-sizing: border-box;
-            background-color: white;
-            text-align: center; /* Added for center alignment */
-        }
-        .input-group input.empty-field {
-            background-color: #ffe6e6;
-            border-color: red;
-        }
+
+        /* Form Layout */
         .form-row {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: space-between; 
             margin-bottom: 0; 
         }
-        .form-row .input-group {
-            flex: 0 0 calc(50% - 10px);
-            margin-bottom: 15px;
-        }
-        @media (max-width: 768px) {
-            .form-row .input-group {
-                flex: 0 0 100%;
-            }
-        }
-        button {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 18px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #calculateButton { 
-            background-color: #28a745;
-            width: 30%;
-            margin: 20px auto 0 auto;
-        }
-        #calculateButton:hover {
-            background-color: #218838;
-        }
-
-        #results {
-            margin-top: 40px;
-            padding-top: 20px;
-        }
-        #results h2 {
-            color: #0056b3;
-            text-align: center;
+        .input-group {
+            flex: 0 0 calc(50% - 15px);
+            display: flex;
+            flex-direction: row; 
+            align-items: center; 
             margin-bottom: 20px;
         }
-        .table-container {
-            max-height: 500px;
-            overflow-y: auto;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+        .input-group label {
+            flex: 1;
+            margin-right: 15px;
+            margin-bottom: 0;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #4B5563;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            text-align: left;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9em;
+        .input-group input {
+            flex: 0 0 140px; 
+            max-width: 140px;
+            padding: 10px;
+            border: 1px solid #D1D5DB;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            background-color: #F9FAFB;
+            color: #111827;
             text-align: center;
         }
-        table thead tr {
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 1;
-        }
-        table th, table td {
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-        }
-        table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
-        table tbody tr:hover {
-            background-color: #e2e2e2;
-        }
-        .currency {
-            text-align: center;
-        }
-        .positive-saving {
-            color: green;
-            font-weight: bold;
-        }
-        .negative-saving {
-            color: red;
-            font-weight: bold;
-        }
-        .zero-saving {
-            color: red;
-            font-weight: bold;
-        }
-        .withdrawal-zero {
-            color: green;
-            font-weight: bold;
-        }
-        .withdrawal-positive {
-            color: red;
-            font-weight: bold;
+        .input-group input:focus {
+            outline: none;
+            border-color: #F97316; 
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
         }
 
-        #chart-section {
-            padding-top: 20px;
-            text-align: center;
-            flex-grow: 1; /* Allow chart section to take available space */
-        }
-        #chart-section h2 {
-            color: #0056b3;
-            margin-bottom: 20px;
-        }
-        .chart-container-wrapper { /* New wrapper for individual chart containers */
-            position: relative;
-            width: 100%; /* Take full width of its flex parent */
-            height: 400px;
-            margin-bottom: 40px; /* Increased space below each chart wrapper */
-        }
-        .chart-container-wrapper canvas {
-            display: block; /* Ensure canvas takes full space */
-        }
-        /* Styles for the new chart toggle buttons */
-        .chart-toggle-group {
-            display: flex; /* Makes buttons sit side-by-side */
-            justify-content: center; /* Centers the button group */
-            margin-bottom: 20px; /* Space below the toggle */
-        }
-
-        .chart-toggle-group button {
-            flex: 1; /* This will make both buttons take equal width */
-            max-width: 200px; /* Optional: Limit max width for very wide screens */
-            padding: 10px 20px;
-            border: 1px solid #007bff;
-            background-color: #f0f8ff; /* Light background for inactive */
-            color: #007bff;
-            cursor: pointer;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            width: auto; /* Override default button width */
-            display: inline-block; /* Allow buttons to sit next to each other */
-            margin: 0; /* Reset margins */
-            border-radius: 0; /* Remove individual button radius for segmented look */
-            text-align: center; /* Ensure text is centered within the button */
-        }
-
-        .chart-toggle-group button:first-child {
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
-
-        .chart-toggle-group button:last-child {
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
-            border-left: none; /* Merge borders */
-        }
-
-        .chart-toggle-group button.active {
-            background-color: #007bff; /* Darker background for active */
-            color: white;
-        }
-
-        .chart-toggle-group button:hover:not(.active) {
-            background-color: #e6f2ff; /* Lighter hover for inactive */
-        }
-
-        /* Tooltip styles */
+        /* Tooltip Styles */
         .icon-wrapper.tooltip {
             position: relative;
             display: flex;
@@ -232,148 +140,317 @@
             justify-content: center;
             width: 20px;
             height: 20px;
-            margin-right: 5px; /* Changed to margin-right for spacing before text */
-            flex-shrink: 0;
+            margin-right: 8px;
+            cursor: help;
+            flex-shrink: 0; 
         }
-
         .icon-wrapper.tooltip .tooltiptext {
             visibility: hidden;
-            width: 250px;
-            background-color: #555;
+            width: 240px;
+            background-color: #1F2937;
             color: #fff;
             text-align: center;
             border-radius: 6px;
-            padding: 5px 10px;
+            padding: 8px 12px;
             position: absolute;
-            z-index: 1;
-            bottom: 125%;
+            z-index: 10;
+            bottom: 140%;
             left: 50%;
-            margin-left: -125px;
+            transform: translateX(-50%);
             opacity: 0;
-            transition: opacity 0.3s;
-            font-size: 0.8em;
+            transition: opacity 0.2s;
+            font-size: 0.75rem;
+            font-weight: 500;
             line-height: 1.4;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-transform: none;
         }
-
         .icon-wrapper.tooltip .tooltiptext::after {
             content: "";
             position: absolute;
             top: 100%;
             left: 50%;
-            margin-left: -5px;
-            border-width: 5px;
+            margin-left: -6px;
+            border-width: 6px;
             border-style: solid;
-            border-color: #555 transparent transparent transparent;
+            border-color: #1F2937 transparent transparent transparent;
         }
-
         .icon-wrapper.tooltip:hover .tooltiptext {
             visibility: visible;
             opacity: 1;
         }
-        .info-icon {
-            cursor: help;
-            font-size: 0.9em;
-            font-weight: normal;
-            color: #007bff;
-            line-height: 1;
+        .info-icon { font-size: 1rem; line-height: 1; }
+
+        /* Button */
+        button#calculateButton {
             display: block;
-        }
-
-        /* Styles for the new summary box */
-        #summaryBox {
-            flex: 0 0 250px; /* Narrower box for summary */
-            margin-right: 30px;
-            padding: 20px;
-            background-color: white; /* Changed to white */
+            width: 100%;
+            max-width: 350px;
+            margin: 40px auto 10px auto;
+            padding: 16px;
+            background-color: #F97316; 
+            color: white;
+            border: none;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border: 1px solid white; /* Changed to white */
-            text-align: center; /* Center align text */
-            display: flex; /* Use flexbox for vertical alignment */
-            flex-direction: column;
-            justify-content: space-around; /* Distribute space evenly */
+            font-size: 1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.3);
         }
-        #summaryBox h3 {
-            color: #0056b3; /* Changed to match main title */
-            margin-top: 0;
-            font-size: 2.2em; /* Bigger font for "Quick Insights" */
-            font-weight: bold; /* Make bold */
-            margin-bottom: 15px; /* Added some margin for spacing */
+        button#calculateButton:hover {
+            background-color: #EA580C; 
+            transform: translateY(-1px);
         }
-        #summaryBox p {
-            font-size: 1.4em; /* Slightly bigger font for depletion messages */
-            margin-bottom: 10px;
-            line-height: 1.4;
-            color: black; /* Changed to black */
-        }
-        #summaryBox #depletionMessage span {
-            font-size: 4.4em; /* Double the current setting for age number */
-            color: red;
-            font-weight: bold;
-            display: block; /* Ensure it's on its own line */
-            margin-top: 5px;
-        }
-        #summaryBox .life-expectancy-group {
-            margin-top: 15px; /* Adjusted margin to prevent crowding */
-            display: flex;
-            justify-content: center; /* Center male/female text */
-            align-items: center;
-            flex-wrap: wrap; /* Allow wrapping on small screens */
-            margin-bottom: 0; /* Remove bottom margin */
-            flex-direction: column; /* Stack male/female vertically */
-        }
-        #summaryBox .life-expectancy-group p {
-            font-size: 1.0em; /* Adjust font size */
-            font-weight: bold;
-            margin: 0 10px; /* Spacing between male/female */
-        }
-        #summaryBox .life-expectancy-group span {
-            font-size: 1.8em; /* Bigger font for life expectancy numbers */
-        }
-        #summaryBox #maleLifeExpectancyValue {
-            color: #007bff;
-        }
-        #summaryBox #femaleLifeExpectancyValue {
-            color: #d63384;
+        button#calculateButton:active {
+            transform: translateY(1px);
         }
 
-        /* Flex container for summary box and chart section */
+        /* Summary & Chart Layout */
         .summary-chart-container {
             display: flex;
-            justify-content: space-between;
-            align-items: stretch; /* Stretch children to match height */
-            margin-top: 40px;
+            gap: 30px;
+            margin-top: 50px;
+            align-items: stretch;
+        }
+        
+        #summaryBox {
+            flex: 0 0 280px;
+            background: #EFF6FF; 
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #DBEAFE;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Quick Insights Title */
+        #summaryBox h3 {
+            color: #1E40AF;
+            font-size: 2.1rem; 
+            margin-top: 0;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 20px;
+        }
+        
+        #summaryBox p {
+            color: #374151;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        /* Depletion & Longevity Text */
+        .depletion-age-text {
+            font-size: 4.5rem; 
+            color: #DC2626;
+            font-weight: 700;
+            line-height: 1;
+            vertical-align: middle;
+            display: block; 
+            margin-top: 5px;
+        }
+        
+        .longevity-text {
+            font-size: 4.5rem; 
+            color: #059669; 
+            font-weight: 700; 
+            line-height: 1;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .life-expectancy-group {
+            margin-top: auto; 
+            padding-top: 20px;
+            border-top: 1px solid #DBEAFE;
+        }
+        .life-expectancy-group p {
+            font-size: 0.85rem;
+            margin: 5px 0;
+            font-weight: 600;
+            color: #6B7280;
+        }
+        .life-expectancy-group span {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #111827;
+        }
+        #maleLifeExpectancyValue { color: #2563EB; }
+        #femaleLifeExpectancyValue { color: #DB2777; }
+
+        /* Charts Area */
+        #chart-section {
+            flex-grow: 1;
+            padding-top: 0;
+        }
+        .chart-toggle-group {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .chart-toggle-group button {
+            flex: 1;
+            max-width: 180px;
+            padding: 10px 16px;
+            border: 1px solid #D1D5DB;
+            background-color: #FFFFFF;
+            color: #4B5563;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            margin: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+        .chart-toggle-group button:first-child {
+            border-top-left-radius: 6px;
+            border-bottom-left-radius: 6px;
+            border-right: none;
+        }
+        .chart-toggle-group button:last-child {
+            border-top-right-radius: 6px;
+            border-bottom-right-radius: 6px;
+            border-left: 1px solid #D1D5DB;
+        }
+        
+        .chart-toggle-group button:hover:not(.active) {
+            background-color: #F3F4F6;
+        }
+        #showBalanceChart.active {
+            background-color: #2563EB; 
+            color: white;
+            border-color: #2563EB;
+            z-index: 1;
+        }
+        #showDividendChart.active {
+            background-color: #10B981; 
+            color: white;
+            border-color: #10B981;
+            z-index: 1;
+        }
+
+        .chart-container-wrapper {
+            background: white;
+            border-radius: 8px;
+            padding: 10px; 
+            height: 400px;
+        }
+        #chart-section h2 { display: none; }
+
+        /* Results Table */
+        #results { margin-top: 50px; }
+        #results h2 {
+            color: #111827;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #E5E7EB;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        table thead tr {
+            background-color: #F9FAFB;
+            color: #374151;
+            position: sticky;
+            top: 0;
+            z-index: 5;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        table th {
+            padding: 16px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.75rem;
+            border: none;
+            border-bottom: 2px solid #E5E7EB;
+        }
+        table td {
+            padding: 14px 16px;
+            border: none;
+            border-bottom: 1px solid #E5E7EB;
+            color: #4B5563; /* This is the standard Div. Earned color */
+        }
+        table tbody tr:last-child td { border-bottom: none; }
+        table tbody tr:nth-of-type(even) { background-color: #FAFAFA; }
+        table tbody tr:hover { background-color: #F3F4F6; }
+        
+        .positive-saving { color: #059669; font-weight: 600; } 
+        .negative-saving { color: #DC2626; font-weight: 600; } 
+        
+        .zero-saving { color: #4B5563; font-weight: 400; background-color: transparent; }
+        
+        .withdrawal-positive { color: #DC2626; font-weight: 600; } 
+        
+        @media (max-width: 768px) {
+            .container { padding: 20px; }
+            .input-group { flex: 0 0 100%; }
+            .summary-chart-container { flex-direction: column; }
+            #summaryBox { width: auto; margin-right: 0; margin-bottom: 30px; }
+            .header-background-image { height: 140px; }
+            
+            /* Adjust negative margins for mobile padding */
+            .header-content { 
+                height: 140px; 
+                margin-top: -20px;
+                margin-left: -20px;
+                margin-right: -20px;
+                margin-bottom: 20px; 
+            } 
+            h1 { font-size: 22px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Malaysia EPF Retirement Calculator</h1>
-        <p class="creator-info">
-            Created by WH Lai, 22-11-2025<br>
-            The developer assumes no responsibility for any consequences of its use.
-        </p>
+        <div class="header-background-image"></div>
+        <div class="header-content">
+            <h1>Malaysia EPF Retirement Calculator</h1>
+            <p class="creator-info">
+                Created by WH Lai, 22-11-2025<br>
+                The developer assumes no responsibility for any consequences of its use.
+            </p>
+        </div>
 
-        <div class="form-row">
+        <div class="form-row" style="margin-top: 0;"> 
             <div class="input-group">
                 <label for="currentSaving">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Current EPF Balance">💰</span>
-                        <span class="tooltiptext">Enter the total amount currently accumulated in your Employees Provident Fund (EPF) account up to the present date.</span>
+                        <span class="info-icon" aria-label="Info">💰</span>
+                        <span class="tooltiptext">Enter the total amount currently accumulated in your EPF account.</span>
                     </span>
-                    Current EPF Balance (RM):
+                    Current EPF Balance (RM)
                 </label>
-                <input type="number" id="currentSaving" value="50000" min="0" placeholder="Please enter a value">
+                <!-- Whole Number Only: step="1" and onkeypress block decimals -->
+                <input type="number" id="currentSaving" value="50000" min="0" step="1" placeholder="e.g. 50000" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
             <div class="input-group">
                 <label for="age">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Current Age">🎂</span>
-                        <span class="tooltiptext">Your age in years as of today. This is the starting point for all projections.</span>
+                        <span class="info-icon" aria-label="Info">🎂</span>
+                        <span class="tooltiptext">Your age in years as of today.</span>
                     </span>
-                    Current Age (Years):
+                    Current Age (Years)
                 </label>
-                <input type="number" id="age" value="30" min="18" max="99" step="1" placeholder="Please enter a value">
+                <!-- Whole Number Only -->
+                <input type="number" id="age" value="30" min="18" max="99" step="1" placeholder="e.g. 30" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
         </div>
 
@@ -381,22 +458,24 @@
             <div class="input-group">
                 <label for="annualSaving">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Projected Annual EPF Contribution">💵</span>
-                        <span class="tooltiptext">The estimated total amount you (and your employer, if applicable) expect to contribute to your EPF account annually. This amount is assumed for the first year of projection.</span>
+                        <span class="info-icon" aria-label="Info">💵</span>
+                        <span class="tooltiptext">Total estimated annual EPF contribution (Employee + Employer).</span>
                     </span>
-                    Projected Annual EPF Contribution (RM):
+                    Annual Contribution (RM)
                 </label>
-                <input type="number" id="annualSaving" value="10000" min="0" placeholder="Please enter a value">
+                <!-- Whole Number Only -->
+                <input type="number" id="annualSaving" value="10000" min="0" step="1" placeholder="e.g. 10000" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
             <div class="input-group">
                 <label for="projectedContributionIncrement">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Annual EPF Contribution Growth Rate">↗️</span>
-                        <span class="tooltiptext">The percentage by which your annual EPF contributions are expected to increase each year (e.g., due to salary increments or promotion). Enter '0' if you expect no annual increase.</span>
+                        <span class="info-icon" aria-label="Info">↗️</span>
+                        <span class="tooltiptext">Expected yearly increase in EPF contribution (%).</span>
                     </span>
-                    Annual EPF Contribution Growth Rate (%):
+                    Contribution Growth Rate (%)
                 </label>
-                <input type="number" id="projectedContributionIncrement" value="3" min="0" step="0.1" placeholder="Please enter a value">
+                <!-- Decimals Allowed -->
+                <input type="number" id="projectedContributionIncrement" value="3" min="0" step="0.1" placeholder="e.g. 3">
             </div>
         </div>
         
@@ -404,22 +483,24 @@
             <div class="input-group">
                 <label for="contributionAgeLimit">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Age to Cease EPF Contributions">🛑</span>
-                        <span class="tooltiptext">The age at which you anticipate ceasing all further contributions to your EPF account. This is typically your planned retirement age or an earlier date.</span>
+                        <span class="info-icon" aria-label="Info">🛑</span>
+                        <span class="tooltiptext">Age at which you will stop contributing to EPF.</span>
                     </span>
-                    Age to Cease EPF Contributions (Years):
+                    Age to Cease Contributions
                 </label>
-                <input type="number" id="contributionAgeLimit" value="55" min="18" max="99" step="1" placeholder="Please enter a value">
+                <!-- Whole Number Only -->
+                <input type="number" id="contributionAgeLimit" value="55" min="18" max="99" step="1" placeholder="e.g. 55" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
             <div class="input-group">
                 <label for="interestRate">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Anticipated Annual EPF Dividend Rate">📊</span>
-                        <span class="tooltiptext">The average annual dividend or interest rate you expect your EPF savings to earn. Historically, this has ranged but a common assumption is between 4-6%.</span>
+                        <span class="info-icon" aria-label="Info">📊</span>
+                        <span class="tooltiptext">Expected annual EPF dividend rate (typically 4-6%).</span>
                     </span>
-                    Anticipated Annual EPF Dividend Rate (%):
+                    Annual Dividend Rate (%)
                 </label>
-                <input type="number" id="interestRate" value="5" min="0" step="0.1" placeholder="Please enter a value">
+                <!-- Decimals Allowed -->
+                <input type="number" id="interestRate" value="5" min="0" step="0.1" placeholder="e.g. 5">
             </div>
         </div>
 
@@ -427,22 +508,24 @@
             <div class="input-group">
                 <label for="annualWithdrawal">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Initial Annual Retirement Withdrawal">💸</span>
-                        <span class="tooltiptext">The initial annual amount you plan to withdraw from your EPF savings during retirement, starting at your specified withdrawal age. This amount will be adjusted for inflation in subsequent years.</span>
+                        <span class="info-icon" aria-label="Info">💸</span>
+                        <span class="tooltiptext">Initial yearly amount to withdraw from EPF for retirement expenses.</span>
                     </span>
-                    Initial Annual Retirement Withdrawal (RM):
+                    Annual Withdrawal (RM)
                 </label>
-                <input type="number" id="annualWithdrawal" value="5000" min="0" placeholder="Please enter a value">
+                <!-- Whole Number Only -->
+                <input type="number" id="annualWithdrawal" value="5000" min="0" step="1" placeholder="e.g. 5000" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
             <div class="input-group">
                 <label for="initialWithdrawalAge">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Age to Initiate Annual Withdrawals">👵</span>
-                        <span class="tooltiptext">The age at which you intend to begin making annual withdrawals from your EPF account. Please note that EPF allows withdrawals from age 55 (Account 2) and full withdrawals from age 55/60 (subject to EPF rules).</span>
+                        <span class="info-icon" aria-label="Info">👵</span>
+                        <span class="tooltiptext">Age to start making annual EPF withdrawals (Minimum 55).</span>
                     </span>
-                    Age to Initiate Annual Withdrawals (Years, ≥55):
+                    Withdrawal Start Age
                 </label>
-                <input type="number" id="initialWithdrawalAge" value="55" min="55" max="99" step="1" placeholder="Please enter a value">
+                <!-- Whole Number Only -->
+                <input type="number" id="initialWithdrawalAge" value="55" min="55" max="99" step="1" placeholder="e.g. 55" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
             </div>
         </div>
 
@@ -450,35 +533,36 @@
             <div class="input-group">
                 <label for="inflationRate">
                     <span class="icon-wrapper tooltip">
-                        <span class="info-icon" aria-label="Info: Anticipated Annual Inflation Rate">🔥</span>
-                        <span class="tooltiptext">The average annual rate at which you expect the cost of living to increase. This rate is used to adjust your annual withdrawal amount each year to maintain its purchasing power. Over the past decade (2014-2023), Malaysia's average annual inflation has typically ranged between 2.0% and 2.5%.</span>
+                        <span class="info-icon" aria-label="Info">🔥</span>
+                        <span class="tooltiptext">Expected annual inflation rate to adjust withdrawal amount.</span>
                     </span>
-                    Anticipated Annual Inflation Rate (%):
+                    Inflation Rate (%)
                 </label>
-                <input type="number" id="inflationRate" value="2" min="0" step="0.1" placeholder="Please enter a value">
+                <!-- Decimals Allowed -->
+                <input type="number" id="inflationRate" value="2" min="0" step="0.1" placeholder="e.g. 2">
             </div>
+            <div class="input-group" style="visibility: hidden;"></div>
         </div>
 
-        <button id="calculateButton" onclick="calculateEPF()">Calculate</button>
+        <button id="calculateButton" onclick="calculateEPF()">Calculate Projection</button>
 
         <div class="summary-chart-container">
-            <!-- New Summary Box -->
+            <!-- Summary Box -->
             <div id="summaryBox">
                 <h3>Quick Insights</h3>
                 <p id="depletionMessage">
-                    <!-- Message will be inserted here -->
+                    <!-- Message inserted by JS -->
                 </p>
                 <div class="life-expectancy-group">
-                    <p style="margin-bottom: 5px;">Average Malaysian Life Expectancy:</p>
-                    <p>Male: <span id="maleLifeExpectancyValue">72.9</span> yrs</p>
-                    <p>Female: <span id="femaleLifeExpectancyValue">77.6</span> yrs</p>
+                    <p>Avg Life Expectancy</p>
+                    <p>Male: <span id="maleLifeExpectancyValue">72.9</span> | Female: <span id="femaleLifeExpectancyValue">77.6</span></p>
                 </div>
             </div>
 
             <div id="chart-section">
                 <div class="chart-toggle-group">
-                    <button id="showBalanceChart" class="active" onclick="switchChart('balance')">Year-End EPF Balance</button>
-                    <button id="showDividendChart" onclick="switchChart('dividend')">Yearly EPF Dividend Earning</button>
+                    <button id="showBalanceChart" class="active" onclick="switchChart('balance')">Balance History</button>
+                    <button id="showDividendChart" onclick="switchChart('dividend')">Dividend History</button>
                 </div>
                 
                 <div id="epfBalanceChartWrapper" class="chart-container-wrapper">
@@ -494,22 +578,22 @@
         </div>
 
         <div id="results">
-            <h2>Retirement Projection Summary</h2>
+            <h2>Retirement Projection Table</h2>
             <div class="table-container">
                 <table id="epfTable">
                     <thead>
                         <tr>
-                            <th>Current Age</th>
-                            <th>Starting EPF Balance (RM)</th>
-                            <th>Annual EPF Contribution (RM)</th>
-                            <th>Annual EPF Dividend Rate (%)</th>
-                            <th>Yearly EPF Dividend Earning (RM)</th>
-                            <th>Inflation-Adjusted Annual Withdrawal (RM)</th>
-                            <th>Year-End EPF Balance (RM)</th>
+                            <th>Age</th>
+                            <th>Starting Bal. (RM)</th>
+                            <th>Contrib. (RM)</th>
+                            <th>Div. Rate</th>
+                            <th>Div. Earned (RM)</th>
+                            <th>Withdrawal (RM)</th>
+                            <th>End Bal. (RM)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Results will be inserted here by JavaScript -->
+                        <!-- Results inserted by JS -->
                     </tbody>
                 </table>
             </div>
@@ -519,20 +603,38 @@
     <script>
         let epfBalanceChart;
         let epfDividendChart;
-        let currentChart = 'balance'; // Track which chart is currently displayed
+        let currentChart = 'balance'; 
 
-        // This array will store the color decision for each year,
-        // which will be used by both charts.
-        let yearColors = []; 
+        // Fields that must be integers
+        const integerFields = [
+            'currentSaving', 
+            'age', 
+            'annualSaving', 
+            'contributionAgeLimit', 
+            'annualWithdrawal', 
+            'initialWithdrawalAge'
+        ];
 
         function validateInput(inputElement) {
-            if (inputElement.value === '' || isNaN(parseFloat(inputElement.value))) {
-                inputElement.classList.add('empty-field');
-                inputElement.placeholder = "Please enter a value";
+            let val = inputElement.value;
+            let isValid = true;
+
+            // Check if empty or not a number
+            if (val === '' || isNaN(parseFloat(val))) {
+                isValid = false;
+            } 
+            // Check for decimals in restricted fields
+            else if (integerFields.includes(inputElement.id) && (val.includes('.') || val % 1 !== 0)) {
+                isValid = false;
+            }
+
+            if (!isValid) {
+                inputElement.style.backgroundColor = '#FEF2F2';
+                inputElement.style.borderColor = '#DC2626';
                 return false;
             } else {
-                inputElement.classList.remove('empty-field');
-                inputElement.placeholder = "";
+                inputElement.style.backgroundColor = '#F9FAFB';
+                inputElement.style.borderColor = '#D1D5DB';
                 return true;
             }
         }
@@ -544,38 +646,16 @@
                 'initialWithdrawalAge'
             ];
             let allInputsValid = true;
-            let emptyFields = [];
-            let decimalAgeFields = [];
 
             inputIds.forEach(id => {
                 const inputElement = document.getElementById(id);
                 if (!validateInput(inputElement)) {
                     allInputsValid = false;
-                    let labelNode = document.querySelector(`label[for="${id}"]`);
-                    let labelText = Array.from(labelNode.childNodes)
-                                         .filter(node => node.nodeType === Node.TEXT_NODE && node.textContent.trim() !== '')
-                                         .map(node => node.textContent.trim())
-                                         .join(' ');
-                    if (labelText.endsWith(':')) labelText = labelText.slice(0, -1);
-                    emptyFields.push(labelText);
-                } else {
-                    if (['age', 'contributionAgeLimit', 'initialWithdrawalAge'].includes(id)) {
-                        if (parseFloat(inputElement.value) !== parseInt(inputElement.value)) {
-                            decimalAgeFields.push(document.querySelector(`label[for="${id}"]`).textContent.replace(':', '').trim());
-                            inputElement.classList.add('empty-field');
-                            allInputsValid = false;
-                        }
-                    }
                 }
             });
 
-            if (emptyFields.length > 0) {
-                alert('Please fill in the following fields:\n' + emptyFields.join('\n'));
-                return;
-            }
-
-            if (decimalAgeFields.length > 0) {
-                alert('Please enter whole numbers for the following age fields:\n' + decimalAgeFields.join('\n'));
+            if (!allInputsValid) {
+                alert('Please fill in all fields correctly. Note that some fields (like Age and amounts) do not accept decimal values.');
                 return;
             }
 
@@ -583,31 +663,14 @@
             let contributionAgeLimit = parseInt(document.getElementById('contributionAgeLimit').value);
             let initialWithdrawalAge = parseInt(document.getElementById('initialWithdrawalAge').value);
             
-            if (contributionAgeLimit < currentAge) {
-                alert('Age to Cease EPF Contributions must be greater than or equal to Current Age.');
-                document.getElementById('contributionAgeLimit').classList.add('empty-field');
-                document.getElementById('contributionAgeLimit').focus();
-                return;
-            } else {
-                document.getElementById('contributionAgeLimit').classList.remove('empty-field');
-            }
-
-            if (initialWithdrawalAge < 55) {
-                alert('Age to Initiate Annual Withdrawals must be 55 or greater.');
-                document.getElementById('initialWithdrawalAge').classList.add('empty-field');
-                document.getElementById('initialWithdrawalAge').focus();
-                return;
-            } else if (initialWithdrawalAge < currentAge) {
-                 alert('Age to Initiate Annual Withdrawals cannot be less than your Current Age.');
-                document.getElementById('initialWithdrawalAge').classList.add('empty-field');
-                document.getElementById('initialWithdrawalAge').focus();
-                return;
-            } else {
-                document.getElementById('initialWithdrawalAge').classList.remove('empty-field');
-            }
+            if (contributionAgeLimit < currentAge) { alert('Age to Cease Contributions must be >= Current Age.'); return; }
+            if (initialWithdrawalAge < 55) { alert('Withdrawal Age must be >= 55.'); return; }
+            if (initialWithdrawalAge < currentAge) { alert('Withdrawal Age cannot be less than Current Age.'); return; }
 
             let initialAge = currentAge; 
+            // Use parseFloat for all amounts initially, but restricted inputs are effectively integers
             let currentAnnualSaving = parseFloat(document.getElementById('annualSaving').value);
+            
             let projectedContributionIncrementRate = parseFloat(document.getElementById('projectedContributionIncrement').value) / 100;
             let interestRate = parseFloat(document.getElementById('interestRate').value) / 100;
             let inflationRate = parseFloat(document.getElementById('inflationRate').value) / 100;
@@ -621,14 +684,11 @@
             const ages = [];
             const savings = []; 
             const dividendEarnings = [];
-            yearColors = []; // Reset yearColors for each calculation
 
             let annualWithdrawalAdjustedForInflation = initialAnnualWithdrawal; 
             let withdrawalStarted = false;
-
             let previousYearEndSaving = projectedSaving; 
-
-            let depletionAge = -1; // -1 indicates no depletion
+            let depletionAge = -1;
 
             for (let i = initialAge; i <= 100; i++) {
                 let yearStartSaving = projectedSaving;
@@ -637,9 +697,6 @@
                 if (i < contributionAgeLimit) {
                     annualContributionForThisYear = currentAnnualSaving;
                     currentAnnualSaving *= (1 + projectedContributionIncrementRate); 
-                } else {
-                    annualContributionForThisYear = 0;
-                    currentAnnualSaving = 0;
                 }
 
                 let savingBeforeInterest = yearStartSaving + annualContributionForThisYear;
@@ -657,236 +714,164 @@
                         annualWithdrawalAdjustedForInflation = annualWithdrawalAdjustedForInflation * (1 + inflationRate);
                         actualWithdrawalThisYear = annualWithdrawalAdjustedForInflation;
                     }
-
                     if (savingAfterInterest < actualWithdrawalThisYear) {
                         actualWithdrawalThisYear = savingAfterInterest;
                     }
                 }
                 
                 let yearEndEPFSaving = savingAfterInterest - actualWithdrawalThisYear;
-
+                
+                // Table Row
                 const row = tableBody.insertRow();
                 row.insertCell().textContent = i;
-                row.insertCell().textContent = yearStartSaving.toFixed(2);
-                row.insertCell().textContent = annualContributionForThisYear.toFixed(2);
-                row.insertCell().textContent = (interestRate * 100).toFixed(2);
-                row.insertCell().textContent = interestEarned.toFixed(2);
+                row.insertCell().textContent = yearStartSaving.toLocaleString('en-MY', {minimumFractionDigits:0, maximumFractionDigits:0});
+                row.insertCell().textContent = annualContributionForThisYear.toLocaleString('en-MY', {minimumFractionDigits:0, maximumFractionDigits:0});
+                row.insertCell().textContent = (interestRate * 100).toFixed(1) + '%';
+                row.insertCell().textContent = interestEarned.toLocaleString('en-MY', {minimumFractionDigits:0, maximumFractionDigits:0});
                 
                 const withdrawalCell = row.insertCell();
-                withdrawalCell.textContent = actualWithdrawalThisYear.toFixed(2); 
-                if (actualWithdrawalThisYear > 0) {
-                    withdrawalCell.classList.add('withdrawal-positive');
-                } else {
-                    withdrawalCell.classList.add('withdrawal-zero');
-                }
+                withdrawalCell.textContent = actualWithdrawalThisYear.toLocaleString('en-MY', {minimumFractionDigits:0, maximumFractionDigits:0});
+                if (actualWithdrawalThisYear > 0) withdrawalCell.classList.add('withdrawal-positive');
 
                 const projectedSavingCell = row.insertCell();
-                projectedSavingCell.textContent = yearEndEPFSaving.toFixed(2);
+                projectedSavingCell.textContent = yearEndEPFSaving.toLocaleString('en-MY', {minimumFractionDigits:0, maximumFractionDigits:0});
 
-                if (yearEndEPFSaving <= 0 && depletionAge === -1) { // Set depletion age at first instance of <= 0
-                    depletionAge = i;
+                if (yearEndEPFSaving <= 0) { 
+                    if (depletionAge === -1) depletionAge = i;
                     projectedSavingCell.classList.add('zero-saving');
-                } else if (yearEndEPFSaving >= previousYearEndSaving) {
+                } 
+                else if (yearEndEPFSaving >= previousYearEndSaving) {
                     projectedSavingCell.classList.add('positive-saving');
-                } else {
+                } 
+                else {
                     projectedSavingCell.classList.add('negative-saving');
                 }
-
 
                 ages.push(i);
                 savings.push(yearEndEPFSaving); 
                 dividendEarnings.push(interestEarned);
 
-                // Determine color for the year based on year-end EPF saving trend
-                if (yearEndEPFSaving < previousYearEndSaving) {
-                    yearColors.push('red');
-                } else {
-                    yearColors.push('green');
-                }
                 previousYearEndSaving = yearEndEPFSaving; 
-
                 projectedSaving = yearEndEPFSaving;
             }
-            createEPFBalanceChart(ages, savings, yearColors); // Pass yearColors
-            createEPFDividendChart(ages, dividendEarnings, yearColors); // Pass yearColors
             
-            // Update Summary Box
-            const maleLifeExpectancy = 72.9;
-            const femaleLifeExpectancy = 77.6;
+            createEPFBalanceChart(ages, savings); 
+            createEPFDividendChart(ages, dividendEarnings); 
             
             const depletionMessageElement = document.getElementById('depletionMessage');
             if (depletionAge !== -1) {
-                depletionMessageElement.innerHTML = `Your EPF savings will be fully withdrawn at the age of <span id="depletionAgeValue">${depletionAge}</span>`;
+                depletionMessageElement.innerHTML = `Savings fully depleted at age <span class="depletion-age-text">${depletionAge}</span>`;
             } else {
-                depletionMessageElement.innerHTML = `Your EPF savings are projected to last beyond typical life expectancy.`;
-                depletionMessageElement.style.color = 'black'; // Set color to black
+                depletionMessageElement.innerHTML = `Savings projected to last<span class="longevity-text">>100yrs</span>`;
             }
-            document.getElementById('maleLifeExpectancyValue').textContent = maleLifeExpectancy;
-            document.getElementById('femaleLifeExpectancyValue').textContent = femaleLifeExpectancy;
 
-            // Ensure the correct chart is displayed and buttons are active after recalculation
-            if (currentChart === 'balance') {
-                switchChart('balance');
-            } else {
-                switchChart('dividend');
-            }
+            if (currentChart === 'balance') switchChart('balance');
+            else switchChart('dividend');
         }
 
-        function createEPFBalanceChart(ages, savings, colors) {
+        function createEPFBalanceChart(ages, savings) {
             const ctx = document.getElementById('epfBalanceChart').getContext('2d');
-            if (epfBalanceChart) {
-                epfBalanceChart.destroy();
-            }
-
-            const overallLineColor = colors.some(color => color === 'red') ? 'red' : 'green';
-            const overallFillColor = colors.some(color => color === 'red') ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 255, 0, 0.1)';
+            if (epfBalanceChart) epfBalanceChart.destroy();
 
             epfBalanceChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ages,
-                    datasets: [
-                        {
-                            label: 'Year-End EPF Balance (RM)',
-                            data: savings, 
-                            borderColor: overallLineColor, 
-                            backgroundColor: overallFillColor, 
-                            fill: 'origin', 
-                            tension: 0.1,
-                        }
-                    ]
+                    datasets: [{
+                        label: 'Balance (RM)',
+                        data: savings, 
+                        borderColor: '#2563EB', 
+                        backgroundColor: 'rgba(37, 99, 235, 0.1)', 
+                        fill: true, 
+                        tension: 0.3, 
+                        pointRadius: 0,
+                        pointHitRadius: 10
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Current Age'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Year-End EPF Balance (RM)'
-                            },
-                            beginAtZero: true
-                        }
+                        x: { grid: { display: false } }, 
+                        y: { beginAtZero: true, grid: { borderDash: [5, 5], color: '#E5E7EB' } }
                     },
                     plugins: {
                         tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    label += new Intl.NumberFormat('en-MY', { style: 'currency', currency: 'MYR' }).format(context.raw);
-                                    return label;
-                                }
-                            }
-                        }
+                            backgroundColor: '#1F2937',
+                            padding: 12,
+                            titleFont: { family: 'Montserrat' },
+                            bodyFont: { family: 'Montserrat' },
+                            callbacks: { label: function(context) { return ' RM ' + new Intl.NumberFormat('en-MY').format(context.raw); } }
+                        },
+                        legend: { display: false }
                     }
                 }
             });
         }
 
-        function createEPFDividendChart(ages, dividendEarnings, colors) { // Added colors parameter
+        function createEPFDividendChart(ages, dividendEarnings) {
             const ctx = document.getElementById('epfDividendChart').getContext('2d');
-            if (epfDividendChart) {
-                epfDividendChart.destroy();
-            }
-
-            // Use the same overall color logic as the balance chart
-            const overallLineColor = colors.some(color => color === 'red') ? 'red' : 'green';
-            const overallFillColor = colors.some(color => color === 'red') ? 'rgba(255, 0, 0, 0.1)' : 'rgba(0, 255, 0, 0.1)';
+            if (epfDividendChart) epfDividendChart.destroy();
 
             epfDividendChart = new Chart(ctx, {
                 type: 'line',
                 data: {
                     labels: ages,
-                    datasets: [
-                        {
-                            label: 'Yearly EPF Dividend Earning (RM)',
-                            data: dividendEarnings,
-                            borderColor: overallLineColor, // Applied the conditional color
-                            backgroundColor: overallFillColor, // Applied the conditional fill color
-                            fill: 'origin', 
-                            tension: 0.1,
-                        }
-                    ]
+                    datasets: [{
+                        label: 'Dividend (RM)',
+                        data: dividendEarnings,
+                        borderColor: '#10B981', 
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true, 
+                        tension: 0.3, 
+                        pointRadius: 0,
+                        pointHitRadius: 10
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: 'Current Age'
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Yearly EPF Dividend Earning (RM)'
-                            },
-                            beginAtZero: true
-                        }
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true, grid: { borderDash: [5, 5], color: '#E5E7EB' } }
                     },
                     plugins: {
                         tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    label += new Intl.NumberFormat('en-MY', { style: 'currency', currency: 'MYR' }).format(context.raw);
-                                    return label;
-                                }
-                            }
-                        }
+                            backgroundColor: '#1F2937',
+                            padding: 12,
+                            titleFont: { family: 'Montserrat' },
+                            bodyFont: { family: 'Montserrat' },
+                            callbacks: { label: function(context) { return ' RM ' + new Intl.NumberFormat('en-MY').format(context.raw); } }
+                        },
+                        legend: { display: false }
                     }
                 }
             });
         }
 
         function switchChart(chartType) {
-            const balanceChartWrapper = document.getElementById('epfBalanceChartWrapper');
-            const dividendChartWrapper = document.getElementById('epfDividendChartWrapper');
-            const showBalanceButton = document.getElementById('showBalanceChart');
-            const showDividendButton = document.getElementById('showDividendChart');
+            const balanceWrapper = document.getElementById('epfBalanceChartWrapper');
+            const dividendWrapper = document.getElementById('epfDividendChartWrapper');
+            const btnBalance = document.getElementById('showBalanceChart');
+            const btnDividend = document.getElementById('showDividendChart');
 
             if (chartType === 'balance') {
-                balanceChartWrapper.style.display = 'block';
-                dividendChartWrapper.style.display = 'none';
-                showBalanceButton.classList.add('active');
-                showDividendButton.classList.remove('active');
+                balanceWrapper.style.display = 'block';
+                dividendWrapper.style.display = 'none';
+                btnBalance.classList.add('active');
+                btnDividend.classList.remove('active');
                 currentChart = 'balance';
-            } else if (chartType === 'dividend') {
-                balanceChartWrapper.style.display = 'none';
-                dividendChartWrapper.style.display = 'block';
-                showBalanceButton.classList.remove('active');
-                showDividendButton.classList.add('active');
+            } else {
+                balanceWrapper.style.display = 'none';
+                dividendWrapper.style.display = 'block';
+                btnBalance.classList.remove('active');
+                btnDividend.classList.add('active');
                 currentChart = 'dividend';
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const inputElements = document.querySelectorAll('.input-group input[type="number"]');
-            inputElements.forEach(input => {
-                input.addEventListener('input', () => {
-                    validateInput(input);
-                });
-                validateInput(input);
-            });
-
-            calculateEPF(); // Initial calculation and chart rendering
-
-            // Set initial chart display and active button
-            switchChart('balance');
+            calculateEPF(); 
         });
     </script>
 </body>
